@@ -68,19 +68,56 @@ class Game{
   }
 
   // both parameters are only coordinates x and y
-  swap(selected,target){
-    let aux = this.board[target.x][target.y];
+  swap(selectedPos,targetPos){
+    let aux = this.board[targetPos.x][targetPos.y];
     // set target to selected
-    this.board[target.x][target.y] = this.board[selected.x][selected.y];
+    this.board[targetPos.x][targetPos.y] = this.board[selectedPos.x][selectedPos.y];
     // set selected to target;
-    this.board[selected.x][selected.y] = aux;
-   
-    // check for a clear
+    this.board[selectedPos.x][selectedPos.y] = aux; 
   }
 
-  pullCollumnsDown(){
-
+  // returns true if is a posible move 
+  move(selectedPos,targetPos){
+    swap(selectedPos,targetPos);
+    if(canCleanLine(targetPos)){
+      // disapear and bring down all the rows above
+      return true;
+    }else{
+      // add an efect or something
+      swap(selectedPos,targetPos);
+      return false;
+    }
   }
+
+  pullCandiesDown(){
+    
+  }
+
+  canCleanLine(pos){
+    let verticalAdyacentCount = 0;
+    let last;
+    this.board[pos.x].forEach((candy,i) =>{
+     if(i == 0){
+        last = candy;
+        return;
+      }
+      if(last == candy){
+        verticalAdyacentCount++
+      }
+    });
+    HorizontalAdyacentCount = 0;
+    for(let x = 0; x< this.width;x++){
+      if(x == 0){
+        last = this.board[x][pos.y];
+        continue;
+      }
+      let Icandy = this.board[x][pos.y];
+      if(Icandy == last){
+        HorizontalAdyacentCount++;
+      }
+    }
+    return (verticalAdyacentCount >= this.clearLineSize) || (HorizontalAdyacentCount >= this.clearLineSize);
+  } 
 }
 
 let set1 = ["😀","🥶","😡","😈"];
