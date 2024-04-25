@@ -1,26 +1,41 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <title></title>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <style>
-      .board{
-        display:flex;
-      }
-      .column{
-        display:flex;
-        flex-direction:column-reverse;
-      }
-      .item{
-       margin:3px;
-      }
-    </style>
-  </head>
-  <body>
 
-    <div id="board" class="board">
-      </div>
-    <script src="./index.js"></script>
-  </body>
+<head>
+  <title></title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body {
+      display: flex;
+      justify-content: center;
+      background-color: #f0c8f0;
+    }
+
+    .board {
+      display: flex;
+      outline: 1px solid white;
+      border-radius: 5px;
+      padding: 3px;
+      cursor: default;
+    }
+
+    .column {
+      display: flex;
+      flex-direction: column-reverse;
+    }
+
+    .item {
+      margin: 3px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div id="board" class="board">
+  </div>
+  <script src="./code.js"></script>
+</body>
+
 </html>

@@ -9,7 +9,7 @@ function getRandomInt(min, max) {
 }
 
 class Game{
-  constructor(width,height){
+  constructor(width,heigh){
     // note: board stores collums that stores candies
     this.board = []
     this.width = width;
@@ -23,6 +23,11 @@ class Game{
     let candyIndex = getRandomInt(0,3);
     let candy = candies[candyIndex];
 
+
+    for(let i = 0;i<2;i++){
+
+
+    }
 
     let downCandy = false;
     if(pos.y != 0){
@@ -52,9 +57,15 @@ class Game{
     } 
   }
 
-  // both parameters are only coordinates
+  // both parameters are only coordinates x and y
   swap(selected,target){
-
+    let aux = this.board[target.x][target.y];
+    // set target to selected
+    this.board[target.x][target.y] = this.board[selected.x][selected.y];
+    // set selected to target;
+    this.board[selected.x][selected.y] = aux;
+   
+    // check for a clear
   }
 
   pullCollumnsDown(){
