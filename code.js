@@ -1,7 +1,5 @@
 // game code
 
-let candies = ["😀","🥶","😡","😈"];
-
 function getRandomInt(min, max) {
     min = Math.ceil(min);
     max = Math.floor(max);
@@ -9,11 +7,13 @@ function getRandomInt(min, max) {
 }
 
 class Game{
-  constructor(width,heigh){
+  constructor(width,height,candies,clearLineSize){
     // note: board stores collums that stores candies
     this.board = []
     this.width = width;
     this.height = height;
+    this.candies = candies;
+    this.clearLineSize = clearLineSize;
 
     this.buildGameBoard(width,height);
   }
@@ -21,26 +21,36 @@ class Game{
   // pos.x is the column and pox.y is the row
   generateCandy(pos){
     let candyIndex = getRandomInt(0,3);
-    let candy = candies[candyIndex];
+    let candy = this.candies[candyIndex];
 
+    let repeatedLeftCandyCount = 0;
+    let repeatedDownCandyCount = 0;
 
-    for(let i = 0;i<2;i++){
-
-
+    for(let i = 1;i<this.clearLineSize;i++){
+      let downICandy = this.board[pos.x][pos.y - i];
+      if(downICandy == candy){
+        repeatedDownCandyCount++;
+      }else{
+        break;
+      } 
     }
-
-    let downCandy = false;
-    if(pos.y != 0){
-      downCandy = this.board[pos.x][pos.y - 1];
+    for(let i = 1;i<this.clearLineSize;i++){
+      let leftICandy = false;
+      if(this.board[pos.x - i]){
+        leftICandy = this.board[pos.x -i][pos.y];
+      }
+      if(leftICandy == candy){
+        repeatedLeftCandyCount++;
+      }else{
+        break;
+      } 
     }
-    
-    let leftCandy = false;
-    if(pos.x != 0){
-      leftCandy = this.board[pos.x - 1][pos.y];
+     
+    if(repeatedLeftCandyCount >= this.clearLineSize -1){
+      candy = this.generateCandy(pos);
     }
-
-    if(leftCandy == candy || downCandy == candy){
-      return this.generateCandy(pos);
+    if(repeatedDownCandyCount >= this.clearLineSize -1){
+      candy = this.generateCandy(pos);
     }
 
     return candy; 
@@ -73,9 +83,9 @@ class Game{
   }
 }
 
-
+let set1 = ["😀","🥶","😡","😈"];
 let boardElement = document.getElementById("board");
-let game1 = new Game(6,8);
+let game1 = new Game(6,8,set1,3);
 
 for( let column = 0;column<6;column++){
   let columnElement = document.createElement("div");
@@ -88,13 +98,3 @@ for( let column = 0;column<6;column++){
   }
   boardElement.append(columnElement);
 }
-
-
-
-
-
-
-
-
-
-
