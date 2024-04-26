@@ -78,13 +78,13 @@ class Game{
 
   // returns true if is a posible move 
   move(selectedPos,targetPos){
-    swap(selectedPos,targetPos);
-    if(canCleanLine(targetPos)){
+    this.swap(selectedPos,targetPos);
+    if(this.canCleanLine(targetPos) || this.canCleanLine(selectedPos)){
       // disapear and bring down all the rows above
       return true;
     }else{
       // add an efect or something
-      swap(selectedPos,targetPos);
+      this.swap(selectedPos,targetPos);
       return false;
     }
   }
@@ -120,7 +120,7 @@ class Game{
   } 
 }
 
-let set1 = ["😀","🥶","😡","😈"];
+let set1 = ["😀","🥶","🤡","😈",];
 let boardElement = document.getElementById("board");
 let game1 = new Game(6,8,set1,3);
 
