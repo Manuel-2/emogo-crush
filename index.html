@@ -1,54 +1,50 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <title></title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+      html {
+        font-family: monospace;
+      }
 
-<head>
-  <title></title>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <style>
+      body {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        background-color: #f0c8f0;
+      }
 
-    html{
-      font-family: monospace;
-    }
-    
-    body {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      background-color: #f0c8f0;
-    }
+      h1 {
+        color: coral;
+        font-size: 50px;
+      }
 
-    h1 {
-      color: coral;
-      font-size: 50px;
-    }
+      .board {
+        display: flex;
+        outline: 5px solid white;
+        border-radius: 5px;
+        padding: 5px;
+        cursor: default;
+        user-select: none;
+        font-size: 40px;
+      }
 
-    .board {
-      display: flex;
-      outline: 5px solid white;
-      border-radius: 5px;
-      padding: 5px;
-      cursor: default;
-      user-select: none;
-      font-size: 40px;
-    }
+      .column {
+        display: flex;
+        flex-direction: column-reverse;
+      }
 
-    .column {
-      display: flex;
-      flex-direction: column-reverse;
-    }
+      .item {
+        margin: 5px;
+      }
+    </style>
+  </head>
 
-    .item {
-      margin: 5px;
-    }
-  </style>
-</head>
-
-<body>
-  <h1>Emogo crush</h1>
-  <div id="board" class="board">
-  </div>
-  <script src="./code.js"></script>
-</body>
-
+  <body>
+    <h1>Emogo crush</h1>
+    <div id="board" class="board"></div>
+    <script src="./code.js"></script>
+  </body>
 </html>
