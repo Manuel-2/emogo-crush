@@ -7,7 +7,7 @@ function getRandomInt(min, max) {
 }
 
 class Game {
-  constructor(width, height, candies, clearLineSize,renderCallback) {
+  constructor(width, height, candies, clearLineSize, renderCallback) {
     // note: board stores collums that stores candies
     this.board = [];
     this.width = width;
@@ -87,12 +87,24 @@ class Game {
       return "ilegalMove";
 
     this.swap(selectedPos, targetPos);
-    if (this.canCleanLine(targetPos) || this.canCleanLine(selectedPos)) {
+    let moveResult;
+    let check1 = this.canCleanLine(targetPos);
+    if (check1.clear) {
+      moveResult = check1;
+    } else {
+      moveResult = this.canCleanLine(selectedPos);
+    }
+
+    if (moveResult.clear) {
       // disapear and bring down all the rows above
-      
+      moveResult.toClear.forEach((pos) => {
+        this.board[pos.x][pos.y] = false;
+      });
+
+      this.pullCandiesDown();
+
       this.renderCallback(this.board);
       return "clear";
-      
     } else {
       // add an efect or something
       this.swap(selectedPos, targetPos);
@@ -100,19 +112,29 @@ class Game {
     }
   }
 
-  pullCandiesDown() {}
+  pullCandiesDown(){
+    for(let x = 0;x < this.width;x++){
+      let column = this.board[x]
+      this.board[x] = column.filter( candy => candy);
+    }
+  }
 
   canCleanLine(pos) {
     let verticalAdyacentCount = 1;
     let last;
+    let verticalClearList = [];
+
     for (let y = 0; y < this.height; y++) {
       let candy = this.board[pos.x][y];
+      let candyPos = { x: pos.x, y: y };
       if (y == 0) {
         last = candy;
+        verticalClearList.push(candyPos);
         continue;
       }
       if (last == candy) {
         verticalAdyacentCount++;
+        verticalClearList.push(candyPos);
         if (
           verticalAdyacentCount >= this.clearLineSize &&
           this.board[pos.x][y + 1] != candy
@@ -121,40 +143,56 @@ class Game {
         }
       } else {
         verticalAdyacentCount = 1;
+        verticalClearList = [candyPos];
       }
       last = candy;
     }
 
     let HorizontalAdyacentCount = 1;
+    let horizontalClearList = [];
     for (let x = 0; x < this.width; x++) {
       let candy = this.board[x][pos.y];
+      let candyPos = { x: x, y: pos.y };
       if (x == 0) {
         last = candy;
+        horizontalClearList = [candyPos];
         continue;
       }
       if (candy == last) {
         HorizontalAdyacentCount++;
+        horizontalClearList.push(candyPos);
         if (
           HorizontalAdyacentCount >= this.clearLineSize &&
-          this.board[x + 1] && this.board[x + 1][pos.y] != candy
+          this.board[x + 1] &&
+          this.board[x + 1][pos.y] != candy
         ) {
           break;
         }
       } else {
         HorizontalAdyacentCount = 1;
+        horizontalClearList = [candyPos];
       }
       last = this.board[x][pos.y];
     }
-    return (
-      verticalAdyacentCount >= this.clearLineSize ||
-      HorizontalAdyacentCount >= this.clearLineSize
-    );
+    let toClearList = [];
+    let verticalClear = verticalAdyacentCount >= this.clearLineSize;
+    if (verticalClear) {
+      toClearList.push(...verticalClearList);
+    }
+    let horizontalClear = HorizontalAdyacentCount >= this.clearLineSize;
+    if (horizontalClear) {
+      toClearList.push(...horizontalClearList);
+    }
+    return {
+      clear: verticalClear || horizontalClear,
+      toClear: toClearList,
+    };
   }
 }
 
 let set1 = ["😀", "🥶", "🤡", "😈"];
 let boardElement = document.getElementById("board");
-let game1 = new Game(6, 8, set1, 3);
+let game1 = new Game(6, 8, set1, 3, renderUpdate);
 
 let selectedItems = [,];
 
@@ -185,7 +223,7 @@ for (let column = 0; column < 6; column++) {
     columnElement.append(candyElement);
     renderColumn.push(candyElement);
   }
-  renderMatrix.push[columnElement];
+  renderMatrix.push(renderColumn);
   boardElement.append(columnElement);
 }
 
@@ -193,10 +231,10 @@ function makeMove(selected, target) {
   console.log(game1.move(selected, target));
 }
 
-function renderUpdate(gameBoard){
-  renderMatrix.forEach((column,x) =>{
-    column.forEach((item,y) =>{
+function renderUpdate(gameBoard) {
+  renderMatrix.forEach((column, x) => {
+    column.forEach((item, y) => {
       item.innerText = gameBoard[x][y];
-    })
-  })
+    });
+  });
 }
